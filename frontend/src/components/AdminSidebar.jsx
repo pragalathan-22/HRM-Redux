@@ -6,21 +6,24 @@ import {
   LayoutDashboard,
   Users,
   UserCheck,
+  UserPlus,       // Added for Manager menu
+  Shield,         // Added for HR menu
   Building2,
   Calendar,
-  FileText,
+  Clock,
+  DollarSign,
+  FolderKanban,   // Added for Projects & Teams
+  BarChart3,
+  Bell,
   Settings,
   LogOut,
   Menu,
   X,
   ChevronDown,
   ChevronRight,
-  BarChart3,
-  Shield,
-  Clock,
-  DollarSign,
-  Bell
+  Briefcase,      // Optional if you want for projects/tasks
 } from 'lucide-react';
+
 import { logout } from '../features/auth/authSlice';
 
 const AdminSidebar = () => {
@@ -30,98 +33,122 @@ const AdminSidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const menuItems = [
-    {
-      id: 'dashboard',
-      label: 'Dashboard',
-      icon: LayoutDashboard,
-      path: '/admin',
-      color: 'text-blue-500'
-    },
-    {
-      id: 'employees',
-      label: 'Employee Management',
-      icon: Users,
-      color: 'text-green-500',
-      subItems: [
-        { label: 'All Employees', path: '/admin/employees' },
-        { label: 'Add Employee', path: '/admin/employees/add' },
-        { label: 'Employee Reports', path: '/admin/employees/reports' }
-      ]
-    },
-    {
-      id: 'attendance',
-      label: 'Attendance',
-      icon: Clock,
-      color: 'text-purple-500',
-      subItems: [
-        { label: 'View Attendance', path: '/admin/attendance' },
-        { label: 'Attendance Reports', path: '/admin/attendance/reports' },
-        { label: 'Time Tracking', path: '/admin/attendance/tracking' }
-      ]
-    },
-    {
-      id: 'payroll',
-      label: 'Payroll',
-      icon: DollarSign,
-      color: 'text-yellow-500',
-      subItems: [
-        { label: 'Salary Management', path: '/admin/payroll' },
-        { label: 'Payroll Reports', path: '/admin/payroll/reports' },
-        { label: 'Benefits', path: '/admin/payroll/benefits' }
-      ]
-    },
-    {
-      id: 'departments',
-      label: 'Departments',
-      icon: Building2,
-      color: 'text-indigo-500',
-      subItems: [
-        { label: 'All Departments', path: '/admin/departments' },
-        { label: 'Add Department', path: '/admin/departments/add' }
-      ]
-    },
-    {
-      id: 'leave',
-      label: 'Leave Management',
-      icon: Calendar,
-      color: 'text-pink-500',
-      subItems: [
-        { label: 'Leave Requests', path: '/admin/leave' },
-        { label: 'Leave Policies', path: '/admin/leave/policies' },
-        { label: 'Leave Reports', path: '/admin/leave/reports' }
-      ]
-    },
-    {
-      id: 'reports',
-      label: 'Reports & Analytics',
-      icon: BarChart3,
-      color: 'text-orange-500',
-      subItems: [
-        { label: 'HR Reports', path: '/admin/reports/hr' },
-        { label: 'Performance Reports', path: '/admin/reports/performance' },
-        { label: 'Custom Reports', path: '/admin/reports/custom' }
-      ]
-    },
-    {
-      id: 'notifications',
-      label: 'Notifications',
-      icon: Bell,
-      color: 'text-red-500',
-      path: '/admin/notifications'
-    },
-    {
-      id: 'settings',
-      label: 'Settings',
-      icon: Settings,
-      color: 'text-gray-500',
-      subItems: [
-        { label: 'System Settings', path: '/admin/settings/system' },
-        { label: 'User Permissions', path: '/admin/settings/permissions' },
-        { label: 'Company Profile', path: '/admin/settings/company' }
-      ]
-    }
-  ];
+const menuItems = [
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    path: '/admin',
+    color: 'text-blue-500'
+  },
+  {
+  id: 'managers',
+  label: 'Manager',
+  icon: UserPlus,
+  color: 'text-teal-500',
+  subItems: [
+    { label: 'All Managers', path: '/admin/managers' },
+    { label: 'Add Manager', path: '/admin/managers/add' },
+    { label: 'Manager Profiles', path: '/admin/managers/profiles' }
+  ]
+},
+  {
+    id: 'hr',
+    label: 'HR Management',
+    icon: Shield,
+    color: 'text-purple-600',
+    subItems: [
+      { label: 'All HRs', path: '/admin/hr' },
+      { label: 'HR Profiles', path: '/admin/hr/profiles' },
+      { label: 'HR Teams', path: '/admin/hr/teams' }
+    ]
+  },
+  {
+    id: 'departments',
+    label: 'Departments',
+    icon: Building2,
+    color: 'text-indigo-500',
+    subItems: [
+      { label: 'All Departments', path: '/admin/departments' },
+      { label: 'Add Department', path: '/admin/departments/add' },
+      { label: 'Department Reports', path: '/admin/departments/reports' }
+    ]
+  },
+  {
+    id: 'attendance',
+    label: 'Attendance',
+    icon: Clock,
+    color: 'text-purple-500',
+    subItems: [
+      { label: 'View Attendance', path: '/admin/attendance' },
+      { label: 'Time Tracking', path: '/admin/attendance/tracking' },
+      { label: 'Attendance Reports', path: '/admin/attendance/reports' }
+    ]
+  },
+  {
+    id: 'leave',
+    label: 'Leave Management',
+    icon: Calendar,
+    color: 'text-pink-500',
+    subItems: [
+      { label: 'Leave Requests', path: '/admin/leave' },
+      { label: 'Leave Policies', path: '/admin/leave/policies' },
+      { label: 'Leave Reports', path: '/admin/leave/reports' }
+    ]
+  },
+  {
+    id: 'payroll',
+    label: 'Payroll',
+    icon: DollarSign,
+    color: 'text-yellow-500',
+    subItems: [
+      { label: 'Salary Management', path: '/admin/payroll' },
+      { label: 'Salary Reports', path: '/admin/payroll/reports' },
+      { label: 'Benefits', path: '/admin/payroll/benefits' }
+    ]
+  },
+  {
+    id: 'projects',
+    label: 'Projects & Teams',
+    icon: FolderKanban,
+    color: 'text-cyan-500',
+    subItems: [
+      { label: 'All Projects', path: '/admin/projects' },
+      { label: 'Teams', path: '/admin/teams' }
+    ]
+  },
+  {
+    id: 'reports',
+    label: 'Reports & Analytics',
+    icon: BarChart3,
+    color: 'text-orange-500',
+    subItems: [
+      { label: 'HR Reports', path: '/admin/reports/hr' },
+      { label: 'Performance Reports', path: '/admin/reports/performance' },
+      { label: 'Payroll Reports', path: '/admin/reports/payroll' },
+      { label: 'Custom Reports', path: '/admin/reports/custom' }
+    ]
+  },
+  {
+    id: 'notifications',
+    label: 'Notifications',
+    icon: Bell,
+    color: 'text-red-500',
+    path: '/admin/notifications'
+  },
+  {
+    id: 'settings',
+    label: 'Settings',
+    icon: Settings,
+    color: 'text-gray-500',
+    subItems: [
+      { label: 'System Settings', path: '/admin/settings/system' },
+      { label: 'User Permissions', path: '/admin/settings/permissions' },
+      { label: 'Company Profile', path: '/admin/settings/company' }
+    ]
+  }
+];
+
 
   const handleItemClick = (item) => {
     if (item.path) {
@@ -296,3 +323,4 @@ const AdminSidebar = () => {
 };
 
 export default AdminSidebar;
+

@@ -6,6 +6,10 @@ import ManagerHome from "./pages/manager/ManagerHome";
 import HrHome from "./pages/hr/HrHome";
 import EmployeeHome from "./pages/employee/EmployeeHome";
 import PrivateRoute from "./utils/PrivateRoute";
+import AdminLayout from "./components/AdminLayout";
+import AllManagers from "./pages/admin/managers/AllManagers";
+import AddManager from "./pages/admin/managers/AddManager";
+import ManagerProfiles from "./pages/admin/managers/ManagerProfiles";
 
 export default function App() {
   return (
@@ -23,9 +27,41 @@ export default function App() {
           path="/admin"
           element={
             <PrivateRoute roles={["admin"]}>
-              <AdminHome />
+              <AdminLayout>
+                <AdminHome />
+              </AdminLayout>
             </PrivateRoute>
           }
+        />
+        <Route 
+          path="/admin/managers" 
+          element={
+            <PrivateRoute roles={["admin"]}>
+              <AdminLayout>
+                <AllManagers />
+              </AdminLayout>
+            </PrivateRoute>
+          } 
+        />
+        <Route 
+          path="/admin/managers/add" 
+          element={
+            <PrivateRoute roles={["admin"]}>
+              <AdminLayout>
+                <AddManager />
+              </AdminLayout>
+            </PrivateRoute>
+          } 
+        />
+        <Route 
+          path="/admin/managers/profiles" 
+          element={
+            <PrivateRoute roles={["admin"]}>
+              <AdminLayout>
+                <ManagerProfiles />
+              </AdminLayout>
+            </PrivateRoute>
+          } 
         />
 
         {/* Manager */}

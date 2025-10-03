@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import AdminSidebar from '../../components/AdminSidebar';
 import {
   Users,
   Clock,
@@ -85,11 +84,7 @@ export default function AdminHome() {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      <AdminSidebar />
-      
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
         <header className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
@@ -229,7 +224,6 @@ export default function AdminHome() {
             </motion.div>
           </div>
         </main>
-      </div>
     </div>
   );
 }
