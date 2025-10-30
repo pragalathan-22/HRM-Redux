@@ -85,20 +85,11 @@ export default function AdminHome() {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Bar */}
-        <header className="bg-white border-b border-gray-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
-              <p className="text-gray-600">Welcome back! Here's what's happening today.</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="text-sm text-gray-500">
-                Last updated: {new Date().toLocaleDateString()}
-              </div>
-            </div>
-          </div>
-        </header>
+      {/* Header */}
+      <header className="bg-white border-b border-gray-200 px-6 py-3 shadow-sm">
+        <h1 className="text-xl font-bold text-gray-800">Dashboard</h1>
+        <p className="text-gray-500 text-sm">overview the Dashboard</p>
+      </header>
 
         {/* Dashboard Content */}
         <main className="flex-1 overflow-y-auto p-6">

@@ -12,7 +12,8 @@ export default function AddManager() {
     experience: "",
     salary: "",
     address: "",
-    documents: [], // new field for uploaded docs
+    documents: [],
+    image: null,
   });
 
   const dispatch = useDispatch();
@@ -22,25 +23,34 @@ export default function AddManager() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleFileChange = (e) => {
+  const handleDocumentsChange = (e) => {
     setFormData({ ...formData, documents: Array.from(e.target.files) });
+  };
+
+  const handleImageChange = (e) => {
+    setFormData({ ...formData, image: e.target.files[0] });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Prepare FormData for file uploads
     const data = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (key === "documents") {
-        formData.documents.forEach((file) => data.append("documents", file));
-      } else {
-        data.append(key, formData[key]);
-      }
-    });
 
+    // Append text fields
+    ["name", "email", "department", "role", "phone", "experience", "salary", "address"].forEach(
+      (key) => data.append(key, formData[key])
+    );
+
+    // Append image
+    if (formData.image) data.append("image", formData.image);
+
+    // Append documents
+    formData.documents.forEach((file) => data.append("documents", file));
+
+    // Dispatch Redux action
     dispatch(addManager(data));
 
+    // Reset form
     setFormData({
       name: "",
       email: "",
@@ -51,25 +61,18 @@ export default function AddManager() {
       salary: "",
       address: "",
       documents: [],
+      image: null,
     });
   };
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden bg-gray-50 min-h-screen">
-      {/* Top Bar */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4 shadow">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">Add Manager</h1>
-            <p className="text-gray-600 mt-1">
-              Create a new manager profile for your organization.
-            </p>
-          </div>
-        </div>
+    <div className="flex-1 flex flex-col overflow-hidden p-6">
+      <header className="bg-white border-b border-gray-200 px-6 py-3 shadow-sm mb-4">
+        <h1 className="text-xl font-bold text-gray-800">Add Manager</h1>
+        <p className="text-gray-500 text-sm">Add a new manager</p>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto p-6">
+      <main className="flex-1 overflow-y-auto">
         <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
           <form
             onSubmit={handleSubmit}
@@ -77,128 +80,112 @@ export default function AddManager() {
             encType="multipart/form-data"
           >
             {/* Name */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Full Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Enter full name"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
-                required
-              />
-            </div>
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="border px-3 py-2 rounded col-span-1 md:col-span-2"
+            />
 
             {/* Email */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter email address"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
-                required
-              />
-            </div>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="border px-3 py-2 rounded"
+            />
 
             {/* Department */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Department</label>
-              <input
-                type="text"
-                name="department"
-                value={formData.department}
-                onChange={handleChange}
-                placeholder="Department"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
-                required
-              />
-            </div>
+            <input
+              type="text"
+              name="department"
+              placeholder="Department"
+              value={formData.department}
+              onChange={handleChange}
+              required
+              className="border px-3 py-2 rounded"
+            />
+
+            {/* Role */}
+            <input
+              type="text"
+              name="role"
+              placeholder="Role"
+              value={formData.role}
+              onChange={handleChange}
+              className="border px-3 py-2 rounded"
+            />
 
             {/* Phone */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Phone Number</label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="e.g., +91 9876543210"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
-              />
-            </div>
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="border px-3 py-2 rounded"
+            />
 
             {/* Experience */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Experience (Years)</label>
-              <input
-                type="number"
-                name="experience"
-                value={formData.experience}
-                onChange={handleChange}
-                placeholder="e.g., 5"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
-              />
-            </div>
+            <input
+              type="number"
+              name="experience"
+              placeholder="Experience"
+              value={formData.experience}
+              onChange={handleChange}
+              className="border px-3 py-2 rounded"
+            />
 
             {/* Salary */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Salary (₹)</label>
-              <input
-                type="number"
-                name="salary"
-                value={formData.salary}
-                onChange={handleChange}
-                placeholder="e.g., 50000"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
-              />
-            </div>
+            <input
+              type="number"
+              name="salary"
+              placeholder="Salary"
+              value={formData.salary}
+              onChange={handleChange}
+              className="border px-3 py-2 rounded"
+            />
 
             {/* Address */}
-            <div className="md:col-span-2">
-              <label className="block text-gray-700 font-medium mb-1">Address</label>
-              <textarea
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                placeholder="Enter full address"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
-                rows={3}
-              ></textarea>
+            <textarea
+              name="address"
+              placeholder="Address"
+              value={formData.address}
+              onChange={handleChange}
+              className="border px-3 py-2 rounded col-span-1 md:col-span-2"
+            />
+
+            {/* Image Upload */}
+            <div className="col-span-1 md:col-span-2">
+              <label className="block mb-1 font-medium">Upload Image</label>
+              <input type="file" accept="image/*" onChange={handleImageChange} />
+              {formData.image && <p className="text-sm mt-1">{formData.image.name}</p>}
             </div>
 
-            {/* Documents */}
-            <div className="md:col-span-2">
-              <label className="block text-gray-700 font-medium mb-1">Upload Documents</label>
-              <input
-                type="file"
-                name="documents"
-                multiple
-                onChange={handleFileChange}
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-teal-500 file:text-white hover:file:bg-teal-600"
-              />
-              {formData.documents.length > 0 && (
-                <ul className="mt-2 text-sm text-gray-600 list-disc list-inside">
-                  {formData.documents.map((file, idx) => (
-                    <li key={idx}>{file.name}</li>
-                  ))}
-                </ul>
-              )}
+            {/* Documents Upload */}
+            <div className="col-span-1 md:col-span-2">
+              <label className="block mb-1 font-medium">Upload Documents</label>
+              <input type="file" multiple onChange={handleDocumentsChange} />
+              {formData.documents.length > 0 &&
+                formData.documents.map((file, idx) => (
+                  <p key={idx} className="text-sm">{file.name}</p>
+                ))}
             </div>
 
-            {/* Submit Button */}
-            <div className="md:col-span-2">
-              <button
-                type="submit"
-                className="w-full bg-teal-500 text-white py-2 rounded-lg hover:bg-teal-600 transition duration-200"
-                disabled={isLoading}
-              >
-                {isLoading ? "Adding Manager..." : "Add Manager"}
-              </button>
-            </div>
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="bg-teal-500 text-white py-2 rounded col-span-1 md:col-span-2"
+            >
+              {isLoading ? "Adding..." : "Add Manager"}
+            </button>
           </form>
         </div>
       </main>

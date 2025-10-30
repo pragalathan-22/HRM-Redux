@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const managerSchema = new mongoose.Schema(
   {
-    name: String,
-    email: String,
+    name: { type: String, required: true },
+    email: { type: String, required: true },
     department: String,
     role: String,
     phone: String,
@@ -16,6 +16,10 @@ const managerSchema = new mongoose.Schema(
       type: String,
       enum: ["Active", "Inactive"],
       default: "Active",
+    },
+    image: {
+      type: String,
+      default: "https://via.placeholder.com/150",
     },
   },
   { timestamps: true }
