@@ -1,6 +1,9 @@
 import express from "express";
 import multer from "multer";
 import Manager from "../models/Manager.js";
+import User from "../models/User.js";
+import bcrypt from "bcryptjs";
+
 
 const router = express.Router();
 
@@ -118,5 +121,36 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+
+// 1. Save manager details
+const newManager = await Manager.create({
+  name: req.body.name,
+  email: req.body.email,
+  department: req.body.department,
+  role: "manager",
+  phone: req.body.phone,
+  experience: req.body.experience,
+  salary: req.body.salary,
+  address: req.body.address,
+  image: imagePath,
+  documents: documentsArray,
+});
+
+// 2. Create User Auth Entry for login
+const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+await User.create({
+  name: req.body.name,
+  email: req.body.email,
+  password: hashedPassword,
+  role: "manager",
+});
+return res.status(201).json({
+  message: "Manager added and user account created",
+  manager: newManager,
+});
+
+
 
 export default router;

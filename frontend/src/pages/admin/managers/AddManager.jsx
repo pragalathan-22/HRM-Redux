@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addManager } from "../../../features/manager/managerSlice";
+import { register } from "../../../features/auth/authSlice";
 
 export default function AddManager() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    password: "",        // Added for auth creation
     department: "",
-    role: "",
+    role: "manager",     // Default role
     phone: "",
     experience: "",
     salary: "",
@@ -31,31 +33,43 @@ export default function AddManager() {
     setFormData({ ...formData, image: e.target.files[0] });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // 1️⃣ CREATE LOGIN ACCOUNT FIRST
+    const authPayload = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      role: "manager",
+    };
+
+    const authResponse = await dispatch(register(authPayload));
+
+    if (authResponse.meta.requestStatus !== "fulfilled") {
+      alert("Failed to create login account!");
+      return;
+    }
+
+    // 2️⃣ STORE MANAGER DETAILS
     const data = new FormData();
 
-    // Append text fields
     ["name", "email", "department", "role", "phone", "experience", "salary", "address"].forEach(
       (key) => data.append(key, formData[key])
     );
 
-    // Append image
     if (formData.image) data.append("image", formData.image);
-
-    // Append documents
     formData.documents.forEach((file) => data.append("documents", file));
 
-    // Dispatch Redux action
-    dispatch(addManager(data));
+    await dispatch(addManager(data));
 
-    // Reset form
+    // 3️⃣ RESET FORM
     setFormData({
       name: "",
       email: "",
+      password: "",
       department: "",
-      role: "",
+      role: "manager",
       phone: "",
       experience: "",
       salary: "",
@@ -63,6 +77,8 @@ export default function AddManager() {
       documents: [],
       image: null,
     });
+
+    alert("Manager added successfully!");
   };
 
   return (
@@ -101,6 +117,17 @@ export default function AddManager() {
               className="border px-3 py-2 rounded"
             />
 
+            {/* Password */}
+            <input
+              type="password"
+              name="password"
+              placeholder="Password (for login)"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="border px-3 py-2 rounded"
+            />
+
             {/* Department */}
             <input
               type="text"
@@ -116,10 +143,9 @@ export default function AddManager() {
             <input
               type="text"
               name="role"
-              placeholder="Role"
-              value={formData.role}
-              onChange={handleChange}
-              className="border px-3 py-2 rounded"
+              value="manager"
+              disabled
+              className="border px-3 py-2 rounded bg-gray-200"
             />
 
             {/* Phone */}
@@ -168,14 +194,13 @@ export default function AddManager() {
               {formData.image && <p className="text-sm mt-1">{formData.image.name}</p>}
             </div>
 
-            {/* Documents Upload */}
+            {/* Documents */}
             <div className="col-span-1 md:col-span-2">
               <label className="block mb-1 font-medium">Upload Documents</label>
               <input type="file" multiple onChange={handleDocumentsChange} />
-              {formData.documents.length > 0 &&
-                formData.documents.map((file, idx) => (
-                  <p key={idx} className="text-sm">{file.name}</p>
-                ))}
+              {formData.documents.map((file, i) => (
+                <p key={i} className="text-sm">{file.name}</p>
+              ))}
             </div>
 
             {/* Submit */}
