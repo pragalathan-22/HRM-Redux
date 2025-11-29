@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addManager } from "../../../features/manager/managerSlice";
+import { addManager } from "../../../features/admin/manager/managerSlice";
 import { register } from "../../../features/auth/authSlice";
 
 export default function AddManager() {

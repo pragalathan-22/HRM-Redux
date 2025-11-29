@@ -2,3 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+.toggle-checkbox {
+  width: 42px;
+  height: 22px;
+  appearance: none;
+  background: #d1d5db;
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+}
+.toggle-checkbox:checked {
+  background: #2563eb;
+}
+.toggle-checkbox:checked::after {
+  transform: translateX(20px);
+}
+.toggle-checkbox::after {
+  content: '';
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: 0.2s;
+}

@@ -4,7 +4,6 @@ import Manager from "../models/Manager.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 
-
 const router = express.Router();
 
 // ---------------- MULTER SETUP ----------------
@@ -21,12 +20,24 @@ router.post(
   upload.fields([{ name: "image", maxCount: 1 }, { name: "documents", maxCount: 5 }]),
   async (req, res) => {
     try {
-      const { name, email, department, role, phone, experience, salary, address, lastDate } = req.body;
+      const {
+        name,
+        email,
+        department,
+        role,
+        phone,
+        experience,
+        salary,
+        address,
+        password,
+        lastDate
+      } = req.body;
 
       const documentPaths = req.files["documents"]?.map((f) => f.path) || [];
       const imagePath = req.files["image"]?.[0]?.path || null;
 
-      const manager = new Manager({
+      // Create manager record
+      const newManager = await Manager.create({
         name,
         email,
         department,
@@ -41,8 +52,20 @@ router.post(
         image: imagePath || "https://via.placeholder.com/150",
       });
 
-      const saved = await manager.save();
-      res.status(201).json({ message: "Manager added successfully", manager: saved });
+      // Create User Auth Entry for login
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      await User.create({
+        name,
+        email,
+        password: hashedPassword,
+        role: "manager",
+      });
+
+      res.status(201).json({
+        message: "Manager added successfully",
+        manager: newManager,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Server error" });
@@ -74,7 +97,6 @@ router.put(
       const manager = await Manager.findById(req.params.id);
       if (!manager) return res.status(404).json({ message: "Manager not found" });
 
-      // Update fields if provided
       manager.name = name || manager.name;
       manager.email = email || manager.email;
       manager.department = department || manager.department;
@@ -84,19 +106,16 @@ router.put(
       manager.salary = salary || manager.salary;
       manager.address = address || manager.address;
 
-      // Update lastDate and status
       if (lastDate) {
         manager.lastDate = new Date(lastDate);
         manager.status = new Date(lastDate) < new Date() ? "Inactive" : "Active";
       }
 
-      // Append new documents if uploaded
       if (req.files["documents"]) {
         const filePaths = req.files["documents"].map((f) => f.path);
         manager.documents = [...(manager.documents || []), ...filePaths];
       }
 
-      // Update image if uploaded
       if (req.files["image"]?.[0]) {
         manager.image = req.files["image"][0].path;
       }
@@ -115,42 +134,12 @@ router.delete("/:id", async (req, res) => {
   try {
     const manager = await Manager.findById(req.params.id);
     if (!manager) return res.status(404).json({ message: "Manager not found" });
+
     await Manager.findByIdAndDelete(req.params.id);
     res.json({ id: req.params.id, message: "Manager deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
-
-
-// 1. Save manager details
-const newManager = await Manager.create({
-  name: req.body.name,
-  email: req.body.email,
-  department: req.body.department,
-  role: "manager",
-  phone: req.body.phone,
-  experience: req.body.experience,
-  salary: req.body.salary,
-  address: req.body.address,
-  image: imagePath,
-  documents: documentsArray,
-});
-
-// 2. Create User Auth Entry for login
-const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
-await User.create({
-  name: req.body.name,
-  email: req.body.email,
-  password: hashedPassword,
-  role: "manager",
-});
-return res.status(201).json({
-  message: "Manager added and user account created",
-  manager: newManager,
-});
-
-
 
 export default router;

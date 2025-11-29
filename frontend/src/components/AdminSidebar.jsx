@@ -21,7 +21,7 @@ import {
   X,
   ChevronDown,
   ChevronRight,
-  Briefcase,      // Optional if you want for projects/tasks
+  Briefcase,    
 } from 'lucide-react';
 
 import { logout } from '../features/auth/authSlice';
@@ -59,21 +59,20 @@ const menuItems = [
     color: 'text-purple-600',
     subItems: [
       { label: 'All HRs', path: '/admin/hr' },
-      { label: 'HR Profiles', path: '/admin/hr/profiles' },
       { label: 'HR Teams', path: '/admin/hr/teams' }
     ]
   },
-  {
-    id: 'departments',
-    label: 'Departments',
-    icon: Building2,
-    color: 'text-indigo-500',
-    subItems: [
-      { label: 'All Departments', path: '/admin/departments' },
-      { label: 'Add Department', path: '/admin/departments/add' },
-      { label: 'Department Reports', path: '/admin/departments/reports' }
-    ]
-  },
+  // {
+  //   id: 'departments',
+  //   label: 'Departments',
+  //   icon: Building2,
+  //   color: 'text-indigo-500',
+  //   subItems: [
+  //     { label: 'All Departments', path: '/admin/departments' },
+  //     { label: 'Add Department', path: '/admin/departments/add' },
+  //     { label: 'Department Reports', path: '/admin/departments/reports' }
+  //   ]
+  // },
   {
     id: 'attendance',
     label: 'Attendance',

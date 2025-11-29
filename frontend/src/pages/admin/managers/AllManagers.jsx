@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchManagers } from "../../../features/manager/managerSlice";
+import { fetchManagers } from "../../../features/admin/manager/managerSlice";
 import { User, Mail, Phone, MapPin, Edit, Eye } from "lucide-react";
 
 export default function AllManagers() {

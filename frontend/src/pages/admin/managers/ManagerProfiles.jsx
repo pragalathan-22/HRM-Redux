@@ -4,7 +4,7 @@ import {
   fetchManagers,
   updateManager,
   deleteManager,
-} from "../../../features/manager/managerSlice";
+} from "../../../features/admin/manager/managerSlice";
 import {
   Search,
   Edit3,
